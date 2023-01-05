@@ -8,8 +8,9 @@ cols <- c(
   "away_team",
   "bookmaker_key",
   "bookmaker",
-  "last_update",
+  "bookmaker_last_update",
   "market_key",
+  "market_last_update",
   "outcomes_name",
   "outcomes_price",
   "outcomes_point"
@@ -18,7 +19,7 @@ cols <- c(
 test_that("The Odds API - Odds", {
   skip_on_cran()
   # skip_on_ci()
-  x <- toa_sports_odds(sport_key = 'baseball_mlb', 
+  x <- toa_sports_odds(sport_key = 'americanfootball_nfl', 
                        regions = 'us', 
                        markets = 'spreads', 
                        odds_format = 'decimal',

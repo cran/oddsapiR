@@ -54,11 +54,11 @@
 #' @importFrom janitor clean_names
 #' @importFrom glue glue
 #' @importFrom dplyr rename
-#' @importFrom tidyr unnest
 #' @importFrom rlang .data
+#' @import tidyr
 #' @export
 #' @examples \donttest{
-#'    try(toa_sports_odds(sport_key = 'baseball_mlb', 
+#'    try(toa_sports_odds(sport_key = 'basketball_nba', 
 #'                        regions = 'us', 
 #'                        markets = 'spreads', 
 #'                        odds_format = 'decimal',
@@ -86,13 +86,15 @@ toa_sports_odds <- function(sport_key,
       
       resp <- toa_endpoint %>% 
         toa_api_call() %>% 
-        tidyr::unnest(.data$bookmakers) %>% 
+        tidyr::unnest("bookmakers") %>% 
         dplyr::rename(
-          bookmaker_key = .data$key,
-          bookmaker = .data$title) %>% 
-        tidyr::unnest(.data$markets) %>%
-        dplyr::rename(market_key = .data$key) %>% 
-        tidyr::unnest(.data$outcomes, names_sep = "_") %>% 
+          "bookmaker_key" = "key",
+          "bookmaker" = "title",
+          "bookmaker_last_update" = "last_update") %>% 
+        tidyr::unnest("markets") %>%
+        dplyr::rename("market_key" = "key",
+                      "market_last_update" = "last_update") %>% 
+        tidyr::unnest("outcomes", names_sep = "_") %>% 
         make_toa_data("Sports Odds data from the-odds-api.com", Sys.time())
       
     },
